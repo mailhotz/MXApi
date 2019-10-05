@@ -1,25 +1,36 @@
 package MXApi;
 
 import org.xbill.DNS.*;
+
 import java.util.*;
 
 public class MxRecordHandler {
+    private LinkedList<MXRecord> mxRecords;
 
-    public LinkedList<MXRecord> getMxRecords(String domainName){
-        Record[] records;
+    private void getMxRecords(String domainName){
+        Record[] records = null;
         try
         {
            records = new Lookup(domainName, Type.MX).run();
         }
         catch (TextParseException e) {
-            return null;
+            throw new RuntimeException("Invalid domain name.");
         }
 
-        LinkedList<MXRecord> mxRecords = new LinkedList<MXRecord>();
+        mxRecords = new LinkedList<>();
         if(records != null)
             for (Record record : records)
                 mxRecords.add((MXRecord) record);
 
-        return mxRecords;
+    }
+
+    public LinkedList<String> getMxTargets(String domainName){
+        getMxRecords(domainName);
+        LinkedList<String> mxTargets = new LinkedList<>();
+
+        for (MXRecord record : mxRecords)
+            mxTargets.add(record.getTarget().toString());
+
+        return mxTargets;
     }
 }

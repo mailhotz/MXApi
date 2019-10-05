@@ -3,6 +3,8 @@ package MXApi;
 import org.junit.Before;
 import org.junit.Test;
 import org.xbill.DNS.MXRecord;
+import org.xbill.DNS.Name;
+import org.xbill.DNS.TextParseException;
 
 import java.util.LinkedList;
 
@@ -18,16 +20,16 @@ public class MxRecordHandlerTests {
 
     @Test
     public void getMxRecords_ReturnsEmptyLinkedList_WhenInvalidDomainGiven() {
-        assertEquals(new LinkedList<MXRecord>(), testSubject.getMxRecords("123"));
+        assertEquals(new LinkedList<Name>(), testSubject.getMxTargets("123"));
     }
 
     @Test
     public void getMxRecords_ReturnsNonEmptyLinkedList_WhenValidDomainGiven(){
-        assertTrue(testSubject.getMxRecords("oracle.com").size() > 0);
+        assertTrue(testSubject.getMxTargets("oracle.com").size() > 0);
     }
 
-    @Test
+    @Test(expected = RuntimeException.class)
     public void getMxRecords_ReturnsNull_WhenNoDomainGiven(){
-        assertEquals(null, testSubject.getMxRecords(""));
+        testSubject.getMxTargets("");
     }
 }
