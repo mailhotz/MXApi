@@ -1,7 +1,6 @@
 package MXApi;
 
 import org.xbill.DNS.*;
-
 import java.util.*;
 
 public class MxRecordHandler {
